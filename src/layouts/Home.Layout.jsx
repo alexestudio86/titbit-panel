@@ -1,6 +1,6 @@
 import { useOrdersContext } from '../context/DataProvider';
 import { OrdersPlaceholder } from '../components/Orders.Placeholder';
-import { OrdersList } from '../components/OrdersList';
+import { OrdersList } from '../components/Orders.List';
 
 
 export function HomeLayout () {

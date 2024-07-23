@@ -3,7 +3,7 @@ import { Popover } from 'bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-export function CommentPopover ({title, content}) {
+export function OrderPopover ({title, content}) {
     
     const popover = useRef();
 
