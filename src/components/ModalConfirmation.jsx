@@ -1,18 +1,42 @@
 import { Modal } from "bootstrap";
-import { useEffect, useMemo, useRef } from "react"
+import { useEffect, useRef } from "react"
+import { useOrdersContext } from "../context/DataProvider";
 
 
-export function ModalConfirmation({setModal}) {
+export function ModalConfirmation({modal, setModal}) {
 
-    const modal = useRef();
+    const modalWindow = useRef();
+    const {order} = modal;
+    const {updateOrder} = useOrdersContext();
+    const handleDelivered = () => {
+        const excluded  = ['id'];
+        const filtered  = Object.keys(order).filter(key => !excluded.includes(key));
+        const delivered = filtered.reduce((obj, key) => {
+            return {
+                ...obj,
+                [key]: order[key],
+                status: {
+                    'delayed':      false,
+                    'working':      false,
+                    'delivered':    true
+                },
+                timestamp: {...order.timestamp, modified: new Date()}
+            };
+        },{});
+        updateOrder( order.id, delivered);
+        setModal({
+            order:      null,
+            type:       null
+        })
+    }
 
     useEffect( () => {
-        new Modal(modal.current,{backdrop:false}).toggle();
+        new Modal(modalWindow.current,{backdrop:false}).toggle();
     },[]);
 
     return (
         <div
-            ref={modal}
+            ref={modalWindow}
             className='modal fade'
             id='modalConfirmation'
             data-bs-keyboard="false"
@@ -23,7 +47,7 @@ export function ModalConfirmation({setModal}) {
             <div className='modal-dialog modal-dialog-centered'>
                 <div className="modal-content">
                     <div className="modal-header d-flex justify-content-center">
-                        <h5 className='modal-title text-uppercase'>¿Marcar como entregado?</h5>
+                        <h5 className='modal-title text-uppercase text-center'>¿Marcar {order.guestName} como entregado?</h5>
                     </div>
                     <div className='modal-body text-center d-flex justify-content-around'>
                         <button
@@ -38,7 +62,13 @@ export function ModalConfirmation({setModal}) {
                                 })
                             }}
                         >Cancelar</button>
-                        <button className='btn btn-outline-danger' data-bs-dismiss='modal' data-ident='0' type='button' >Confirmar</button>
+                        <button
+                            className='btn btn-outline-danger'
+                            data-bs-dismiss='modal'
+                            data-ident='0'
+                            type='button'
+                            onClick={ handleDelivered }
+                        >Confirmar</button>
                     </div>
                     <div className="modal-footer d-flex justify-content-center">
                         <small>¡Esta acción no se puede deshacer!</small>

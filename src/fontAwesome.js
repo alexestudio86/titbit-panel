@@ -1,5 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faClock, faCircleCheck, faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
+import { faCircleCheck, faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
+import { faTruck } from '@fortawesome/free-solid-svg-icons';
 
 
-library.add(faClock, faCircleCheck, faQuestionCircle)
+library.add(faCircleCheck, faQuestionCircle, faTruck);

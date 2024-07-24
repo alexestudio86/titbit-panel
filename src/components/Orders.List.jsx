@@ -1,5 +1,5 @@
 import {OrderAlert} from './Order.Alert';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import {ModalConfirmation} from './ModalConfirmation';
 import { useOrdersContext } from '../context/DataProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,7 +9,7 @@ import { OrderStatus } from './Order.Status';
 
 export function OrdersList () {
 
-    const {orders} = useOrdersContext();
+    const {orders, docAdded} = useOrdersContext();
 
     const translateDate = ( evt ) => {
         return evt.toDate().toDateString()
@@ -20,7 +20,7 @@ export function OrdersList () {
     };
 
     const [modal, setModal] = useState({
-        orderId:    null,
+        order:      null,
         type:       null
     });
 
@@ -48,9 +48,17 @@ export function OrdersList () {
                                     <td>{order.guestName}</td>
                                     {/* Pedido */}
                                     <td>
-                                        {order.details.map ( (ord, idx) => (
-                                            <p className="fs-6 m-0" key={idx} >{ord.product}</p>
-                                        ) )}
+                                        <p className="fs-6 m-0">
+                                            {order.details.map ( (dtl, idx) => (
+                                                <Fragment key={idx} >
+                                                    {dtl.variants.map ( (v, i) => (
+                                                        <Fragment key={i}>
+                                                            {`${v.quantity} x `}{dtl.product}{v.name && `, ${v.name}`}{idx < (order.details.length-1) && <br/>}
+                                                        </Fragment>
+                                                    ))}
+                                                </Fragment>
+                                            ) )}
+                                        </p>
                                     </td>
                                     {/* Estatus */}
                                     <td>
@@ -73,7 +81,7 @@ export function OrdersList () {
                                             &&
                                             <small className="d-block font-italic">
                                                 <span className='text-secondary'>
-                                                    <FontAwesomeIcon icon='fa-regular fa-clock' />
+                                                    <FontAwesomeIcon title='Entrega estimada' icon='fa-solid fa-truck' />
                                                 </span>
                                                 {` ${translateTime(order.schedule.time)}`}
                                             </small>
@@ -83,7 +91,7 @@ export function OrdersList () {
                                             &&
                                             <small className="d-block font-weight-bold">
                                                 <span className='text-success'>
-                                                    <FontAwesomeIcon icon="fa-regular fa-circle-check" />
+                                                    <FontAwesomeIcon title='Hora de Entrega' icon="fa-regular fa-circle-check" />
                                                 </span>
                                                 {` ${translateTime(order.timestamp.modified)}`}
                                             </small>
@@ -104,19 +112,17 @@ export function OrdersList () {
                 </table>
             </div>
             {
-                orders.changedDocument
+                docAdded
                 &&
                 <OrderAlert />
             }
             { modal.type === 'delivered' &&
                 <>
-                    <ModalConfirmation setModal={setModal} />
+                    <ModalConfirmation modal={modal} setModal={setModal} />
                     <div className='modal-backdrop fade show'></div>
                 </>
             }
-            <audio id="bell" >
-                <source src="/bell.mp3" type="audio/mpeg" />
-            </audio>
+
         </>
     )
 }

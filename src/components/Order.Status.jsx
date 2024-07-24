@@ -41,7 +41,7 @@ export function OrderStatus({options, setModal}) {
                 break;
             case 'delivered':
                 setModal({
-                    orderId:    ord.id,
+                    order:      ord,
                     type:       'delivered'
                 })
                 break;
@@ -51,159 +51,61 @@ export function OrderStatus({options, setModal}) {
     };
 
     if (options) {            
-        switch (options.statusKey) {
-            case 'delayed':
-                return (
-                    <>
-                        <div className="form-check form-switch" >
-                            <label htmlFor={`${(options.order.guestName).replace(/ /g, "")}-0`} className="form-check-label" >
-                                Retrasado
-                            </label>
-                            <input
-                                type="radio"
-                                value='delayed'
-                                name={`${(options.order.guestName).replace(/ /g, "")}${options.index}`}
-                                id={`${(options.order.guestName).replace(/ /g, "")}-0`}
-                                checked
-                                className="form-check-input bg-danger"
-                                onChange={ e => {
-                                    filterResponse(e.target.value, options.order)
-                                }}
-                            />
-                        </div>
-                        <div className="form-check form-switch">
-                            <label htmlFor={`${(options.order.guestName).replace(/ /g, "")}-1`} className="form-check-label" >
-                                Trabajando
-                            </label>
-                            <input
-                                type="radio"
-                                value='working'
-                                name={`${(options.order.guestName).replace(/ /g, "")}${options.index}`}
-                                id={`${(options.order.guestName).replace(/ /g, "")}-1`}
-                                className="form-check-input"
-                                onChange={ e => {
-                                    filterResponse(e.target.value, options.order)
-                                }}
-                            />
-                        </div>
-                        <div className="form-check form-switch">
-                            <label htmlFor={`${(options.order.guestName).replace(/ /g, "")}-1`} className="form-check-label" >
-                                Entregado
-                            </label>
-                            <input
-                                type="radio"
-                                value='delivered'
-                                name={`${(options.order.guestName).replace(/ /g, "")}${options.index}`}
-                                id={`${(options.order.guestName).replace(/ /g, "")}-2`}
-                                className="form-check-input"
-                                onChange={ e => {
-                                    filterResponse(e.target.value, options.order)
-                                }}
-                            />
-                        </div>
-                    </>
-                )
-                break;
-            case 'working':
-                return (
-                    <>
-                        <div className="form-check form-switch">
-                            <label htmlFor={`${(options.order.guestName).replace(/ /g, "")}-0`} className="form-check-label" >
-                                Retrasado
-                            </label>
-                            <input
-                                type="radio"
-                                value='delayed'
-                                name={`${(options.order.guestName).replace(/ /g, "")}${options.index}`}
-                                id={`${(options.order.guestName).replace(/ /g, "")}-0`}
-                                className="form-check-input w3-danger"
-                                onChange={ e => {
-                                    filterResponse(e.target.value, options.order)
-                                }}
-                            />
-                        </div>
-                        <div className="form-check form-switch">
-                            <label htmlFor={`${(options.order.guestName).replace(/ /g, "")}-1`} className="form-check-label" >
-                                Trabajando
-                            </label>
-                            <input
-                                type="radio"
-                                value='working'
-                                name={`${(options.order.guestName).replace(/ /g, "")}${options.index}`}
-                                id={`${(options.order.guestName).replace(/ /g, "")}-1`}
-                                checked
-                                className="form-check-input bg-warning"
-                                onChange={ e => {
-                                    filterResponse(e.target.value, options.order)
-                                }}
-                            />
-                        </div>
-                        <div className="form-check form-switch">
-                            <label htmlFor={`${(options.order.guestName).replace(/ /g, "")}-2`} className="form-check-label" >
-                                Entregado
-                            </label>
-                            <input
-                                type="radio"
-                                value='delivered'
-                                name={`${(options.order.guestName).replace(/ /g, "")}${options.index}`}
-                                id={`${(options.order.guestName).replace(/ /g, "")}-2`}
-                                className="form-check-input w3-danger"
-                                onChange={ e => {
-                                    filterResponse(e.target.value, options.order)
-                                }}
-                            />
-                        </div>
-                    </>
-                )
-                break;
-            case 'delivered':
-                return (
-                    <>
-                        <div className="form-check form-switch">
-                            <label htmlFor={`${(options.order.guestName).replace(/ /g, "")}-0`} className="form-check-label text-secondary" >
-                                Retrasado
-                            </label>
-                            <input
-                                type="radio"
-                                value='delayed'
-                                name={`${(options.order.guestName).replace(/ /g, "")}${options.index}`}
-                                id={`${(options.order.guestName).replace(/ /g, "")}-1`}
-                                disabled
-                                className="form-check-input w3-danger"
-                            />
-                        </div>
-                        <div className="form-check form-switch">
-                            <label htmlFor={`${(options.order.guestName).replace(/ /g, "")}-1`} className="form-check-label text-secondary" >
-                                Trabajando
-                            </label>
-                            <input
-                                type="radio"
-                                value='working'
-                                name={`${(options.order.guestName).replace(/ /g, "")}${options.index}`}
-                                id={`${(options.order.guestName).replace(/ /g, "")}-1`}
-                                disabled
-                                className="form-check-input w3-danger"
-                            />
-                        </div>
-                        <div className="form-check form-switch" >
-                            <label htmlFor={`${(options.order.guestName).replace(/ /g, "")}-2`} className="form-check-label text-secondary" >
-                                Entregado
-                            </label>
-                            <input
-                                type="radio"
-                                value='delivered'
-                                name={`${(options.order.guestName).replace(/ /g, "")}${options.index}`}
-                                id={`${(options.order.guestName).replace(/ /g, "")}-0`}
-                                disabled
-                                checked className="form-check-input bg-success"
-                            />
-                        </div>
-                    </>
-                )
-                break;
-            default:
-                break;
-        };
+        return (
+            <>
+                <div className="form-check form-switch" >
+                    <label htmlFor={`${(options.order.guestName).replace(/ /g, "")}-0`} className={"form-check-label"+(options.statusKey === 'delivered' ? ' text-secondary' : '')} >
+                        Retrasado
+                    </label>
+                    <input
+                        type="radio"
+                        value='delayed'
+                        name={`${(options.order.guestName).replace(/ /g, "")}${options.index}`}
+                        id={`${(options.order.guestName).replace(/ /g, "")}-0`}
+                        checked={options.statusKey === 'delayed'}
+                        disabled={options.statusKey === 'delivered'}
+                        className={"form-check-input"+(options.statusKey !== 'delivered' ? (options.statusKey === 'delayed'?' bg-danger':'') : ' disabled')}
+                        onChange={ e => {
+                            filterResponse(e.target.value, options.order)
+                        }}
+                    />
+                </div>
+                <div className="form-check form-switch">
+                    <label htmlFor={`${(options.order.guestName).replace(/ /g, "")}-1`} className={"form-check-label"+(options.statusKey === 'delivered' ? ' text-secondary' : '')} >
+                        Trabajando
+                    </label>
+                    <input
+                        type="radio"
+                        value='working'
+                        name={`${(options.order.guestName).replace(/ /g, "")}${options.index}`}
+                        id={`${(options.order.guestName).replace(/ /g, "")}-1`}
+                        checked={options.statusKey === 'working'}
+                        disabled={options.statusKey === 'delivered'}
+                        className={"form-check-input"+(options.statusKey !== 'delivered' ? (options.statusKey === 'working'?' bg-warning':'') : ' disabled')}
+                        onChange={ e => {
+                            filterResponse(e.target.value, options.order)
+                        }}
+                    />
+                </div>
+                <div className="form-check form-switch">
+                    <label htmlFor={`${(options.order.guestName).replace(/ /g, "")}-2`} className={"form-check-label"+(options.statusKey === 'delivered' ? ' text-secondary' : '')} >
+                        Entregado
+                    </label>
+                    <input
+                        type="radio"
+                        value='delivered'
+                        name={`${(options.order.guestName).replace(/ /g, "")}${options.index}`}
+                        id={`${(options.order.guestName).replace(/ /g, "")}-2`}
+                        checked={options.statusKey === 'delivered'}
+                        disabled={options.statusKey === 'delivered'}
+                        className={"form-check-input disabled"+(options.statusKey === 'delivered' ? ' bg-success' : '')}
+                        onChange={ e => {
+                            filterResponse(e.target.value, options.order)
+                        }}
+                    />
+                </div>
+            </>
+        )
     };
 };
 

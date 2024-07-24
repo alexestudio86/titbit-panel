@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import {db} from '../config/firebase.js';
-import {query, collection, where, onSnapshot, doc, updateDoc} from 'firebase/firestore';
+import {query, collection, where, onSnapshot, doc, updateDoc, orderBy} from 'firebase/firestore';
 
 
 const ordersContext = createContext();
@@ -13,10 +13,10 @@ export const OrdersProvider = ({children}) => {
     const [orders, setOrders] = useState(
         {
             items:              [],
-            loading:            false,
-            changedDocument:    false
+            loading:            false
         }
     );
+    const [docAdded, setDocAdded] = useState(false);
 
     const getOrders = async() => {
         const dayFiltered = new Date();
@@ -27,7 +27,7 @@ export const OrdersProvider = ({children}) => {
         });
         try {
             //For make a request inside object, you need create index (this can be created pushing in link console), is not necesary short by, 
-            const queryOrders   =   await query(collection(db, "orders"), where("timestamp.created", '>=', dayFiltered));
+            const queryOrders   =   await query(collection(db, "orders"), where("timestamp.created", '>=', dayFiltered), orderBy("timestamp.created", "desc"));
             
             //const queryOrders   =   await query(collection(db, 'orders'), where('created', '>=', dayFiltered), orderBy('created', 'desc'));
             onSnapshot(queryOrders, (querySnapshot) => {
@@ -38,6 +38,11 @@ export const OrdersProvider = ({children}) => {
                     )),
                     loading:    false
                 });
+                querySnapshot.docChanges().forEach( change => {
+                    if (change.type === "added") {
+                        setDocAdded(true);
+                    }
+                })
             });
         } catch (error) {
             return error
@@ -57,15 +62,15 @@ export const OrdersProvider = ({children}) => {
     }, []);
 
     useEffect( () => {
+        docAdded &&
         new Audio('/bell.mp3').play();
-        orders.changedDocument &&
         setTimeout( () => {
-            setOrders({...orders, changedDocument:false});
+            setDocAdded(false);
         }, 1000);
-    },[orders.changedDocument]);
+    },[docAdded]);
 
     return (
-        <ordersContext.Provider value={{orders, updateOrder}}>
+        <ordersContext.Provider value={{orders, updateOrder, docAdded}}>
             {children}
         </ordersContext.Provider>
     )
