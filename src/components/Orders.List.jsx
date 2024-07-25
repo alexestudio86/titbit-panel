@@ -26,9 +26,9 @@ export function OrdersList () {
 
     return (
         <>
-            <div className="table-responsive">
+            <div className="table-responsive" style={{height: '100vh'}}>
                 <table className="table">
-                    <thead>
+                    <thead className='sticky-top'>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Cliente</th>
