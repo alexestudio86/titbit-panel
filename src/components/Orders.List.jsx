@@ -16,7 +16,7 @@ export function OrdersList () {
     };
     
     const translateTime = ( evt ) => {
-        return evt.toDate().toLocaleTimeString('es-MX')
+        return evt.toDate().toLocaleTimeString(['es-MX'], { hour: "2-digit", minute: "2-digit" })
     };
 
     const [modal, setModal] = useState({

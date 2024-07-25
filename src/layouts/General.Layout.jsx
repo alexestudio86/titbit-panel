@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 export function GeneralLayout ({children}) {
     return (
         <>
-            <div className="container">
+            <div className="container-md">
                 {
                 children
                 ??
